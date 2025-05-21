@@ -1,18 +1,22 @@
-from flask import Flask
-from flask_cors import CORS
-from firebase_admin import credentials, firestore, initialize_app
-from .config import Config
-import os
-
+import base64
+import json
+from io import BytesIO
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
     app.config.from_object(Config)
 
-    # Firebase initialization
-    cred = credentials.Certificate(os.path.join(os.getcwd(), 'firebase_credentials.json'))
-    initialize_app(cred)
+    # Firebase initialization using env variable
+    firebase_cert = os.environ.get("FIREBASE_CREDENTIALS")
+
+    if firebase_cert:
+        cert_bytes = base64.b64decode(firebase_cert)
+        cert_dict = json.loads(cert_bytes)
+        cred = credentials.Certificate(cert_dict)
+        initialize_app(cred)
+    else:
+        raise RuntimeError("FIREBASE_CREDENTIALS environment variable not found")
 
     # Store db connection
     app.db = firestore.client()
