@@ -16,8 +16,8 @@ def create_app():
     firebase_cert = os.environ.get("FIREBASE_CREDENTIALS")
 
     if firebase_cert:
-        cert_bytes = base64.b64decode(firebase_cert)
-        cert_dict = json.loads(cert_bytes)
+        cert_json = base64.b64decode(firebase_cert).decode("utf-8")
+        cert_dict = json.loads(cert_json)
         cred = credentials.Certificate(cert_dict)
         initialize_app(cred)
     else:
