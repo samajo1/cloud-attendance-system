@@ -39,7 +39,6 @@ MarkupSafe==2.1.5
 msgpack==1.1.0
 multidict==6.1.0
 propcache==0.2.0
-python-3.10.13
 proto-plus==1.26.1
 protobuf==5.29.4
 pyasn1==0.6.1
