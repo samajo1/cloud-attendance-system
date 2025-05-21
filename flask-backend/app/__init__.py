@@ -1,6 +1,8 @@
-import base64
-import json
-from io import BytesIO
+from flask import Flask
+from flask_cors import CORS
+from firebase_admin import credentials, firestore, initialize_app
+from .config import Config
+import os
 
 def create_app():
     app = Flask(__name__)
