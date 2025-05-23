@@ -1,8 +1,11 @@
 import axios from 'axios';
 
-const instance = axios.create({
-  baseURL: 'http://localhost:5000/api',
-});
+const baseURL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://your-backend-service-name.onrender.com/api'
+    : 'http://localhost:5000/api';
+
+const instance = axios.create({ baseURL });
 
 instance.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
