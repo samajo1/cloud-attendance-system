@@ -12,18 +12,18 @@ def create_app():
     CORS(app)
     app.config.from_object(Config)
 
-    # Firebase initialization using env variable
-    firebase_cert = os.environ.get("FIREBASE_CREDENTIALS")
-
+    # Firebase initialization
+    firebase_cert = os.environ.get("FIREBASE_CERT")
     if firebase_cert:
+        import base64
+        import json
         cert_json = base64.b64decode(firebase_cert).decode("utf-8")
-        cert_dict = json.loads(cert_json)
-        cred = credentials.Certificate(cert_dict)
+        cred = credentials.Certificate(json.loads(cert_json))
         initialize_app(cred)
     else:
-        raise RuntimeError("FIREBASE_CREDENTIALS environment variable not found")
+        raise ValueError("Missing FIREBASE_CERT environment variable")
 
-    # Store db connection
+    # Firestore client
     app.db = firestore.client()
 
     # Register blueprints
@@ -32,8 +32,11 @@ def create_app():
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(attendance_bp, url_prefix='/api/attendance')
 
+    # ✅ Add root route here
+    @app.route('/')
+    def index():
+        return {"message": "Attendance backend is running!"}
+
     return app
-@app.route('/')
-def index():
-    return {"message": "Attendance backend is running!"}
+
 
