@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const baseURL =
   process.env.NODE_ENV === 'production'
-    ? 'https://your-backend-service-name.onrender.com/api'
+    ? 'https://http://127.0.0.1:10000/api'
     : 'http://localhost:5000/api';
 
 const instance = axios.create({ baseURL });
