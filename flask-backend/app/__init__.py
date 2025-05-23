@@ -9,7 +9,7 @@ from io import BytesIO
 
 def create_app():
     app = Flask(__name__)
-    CORS(app)
+    CORS(app, origins=["https://cloud-attendance-system-frontend.onrender.com"])
 
     firebase_cert = os.environ.get('FIREBASE_CERT')
     if not firebase_cert:
