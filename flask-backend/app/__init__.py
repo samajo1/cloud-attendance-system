@@ -10,20 +10,17 @@ from io import BytesIO
 def create_app():
     app = Flask(__name__)
     CORS(app)
-    app.config.from_object(Config)
 
-    # Firebase initialization
-    firebase_cert = os.environ.get("FIREBASE_CERT")
-    if firebase_cert:
-        import base64
-        import json
-        cert_json = base64.b64decode(firebase_cert).decode("utf-8")
-        cred = credentials.Certificate(json.loads(cert_json))
-        initialize_app(cred)
-    else:
+    firebase_cert = os.environ.get('FIREBASE_CERT')
+    if not firebase_cert:
         raise ValueError("Missing FIREBASE_CERT environment variable")
 
-    # Firestore client
+    # Decode and load credential
+    cert_json = base64.b64decode(firebase_cert).decode("utf-8")
+    cert_dict = json.loads(cert_json)
+    cred = credentials.Certificate(cert_dict)
+    initialize_app(cred)
+
     app.db = firestore.client()
 
     # Register blueprints
