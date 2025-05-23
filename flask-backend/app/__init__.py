@@ -33,7 +33,7 @@ def create_app():
     app.register_blueprint(attendance_bp, url_prefix='/api/attendance')
 
     return app
-    @app.route('/')
+@app.route('/')
 def index():
     return {"message": "Attendance backend is running!"}
 
